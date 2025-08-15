@@ -4,12 +4,15 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "lint": "eslint .",
-    "preview": "vite preview"
+  "dev": "vite", 
+  "build": "vite build",
+  "backend": "cd ../backend && mvn spring-boot:run",
+  "start-all": "concurrently \"npm run backend\" \"npm run dev\"",
+  "lint": "eslint .",
+  "preview": "vite preview"
   },
   "dependencies": {
+    "crypto-js": "^4.2.0",
     "react": "^19.1.1",
     "react-dom": "^19.1.1"
   },
