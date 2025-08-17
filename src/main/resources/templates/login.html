@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Login</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
+    <style>
+        /* Container */
+        .card {
+            max-width: 420px;
+            padding: 40px 35px;
+            margin: 60px auto;
+            box-sizing: border-box;
+            background: rgba(255,155,255,0.1);
+            border-radius: 16px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        /* Title */
+        h2 {
+            font-size: 2.8rem;
+            font-weight: 700;
+            margin-bottom: 30px;
+            color: #fff;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
+
+        /* Form */
+        form {
+            width: 100%;
+        }
+
+        .form-group {
+            margin-bottom: 24px;
+            text-align: left;
+        }
+
+        label {
+            font-size: 1rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: #fff;
+            display: block;
+        }
+
+        input[type="email"], input[type="password"] {
+            width: 100%;
+            padding: 14px 18px;
+            border-radius: 10px;
+            border: none;
+            font-size: 1rem;
+            color: #111;
+            background: rgba(255,255,255,0.9);
+            box-sizing: border-box;
+            transition: box-shadow 0.3s ease;
+        }
+
+        input[type="email"]:focus, input[type="password"]:focus {
+            outline: none;
+            box-shadow: 0 0 0 4px rgba(255, 122, 0, 0.7);
+        }
+
+        /* Button */
+        .btn {
+            width: 100%;
+            padding: 16px 0;
+            background: #ff7a00;
+            color: #fff;
+            font-size: 1.1rem;
+            font-weight: 700;
+            border: none;
+            border-radius: 14px;
+            cursor: pointer;
+            box-shadow: 0 5px 12px rgba(255, 122, 0, 0.5);
+            transition: background 0.3s ease, transform 0.1s ease;
+        }
+
+        .btn:hover {
+            background: #ff0000;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 15px rgba(255, 0, 0, 0.6);
+        }
+
+        /* Flash messages */
+        .flash {
+            background: rgba(0,0,0,0.45);
+            border-radius: 12px;
+            padding: 15px 20px;
+            margin-bottom: 24px;
+            font-weight: 600;
+            color: #fff;
+            text-align: center;
+            box-shadow: inset 0 0 5px rgba(0,0,0,0.4);
+        }
+
+        /* Links */
+        .link {
+            display: block;
+            margin-top: 18px;
+            font-weight: 600;
+            font-size: 1rem;
+            color: #fff0d2;
+            text-decoration: underline;
+            cursor: pointer;
+            transition: color 0.3s ease;
+            user-select: none;
+        }
+        .link:hover {
+            color: #ffb347;
+        }
+
+        /* Footer */
+        .footer {
+            margin-top: 42px;
+            font-size: 14px;
+            color: #fff8e1;
+            user-select: none;
+            text-align: center;
+        }
+
+        /* Responsive tweak */
+        @media (max-width: 480px) {
+            .card {
+                margin: 40px 20px;
+                padding: 30px 25px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="card">
+    <h2>Welcome Back</h2>
+
+    <div th:if="${error}" class="flash" th:text="${error}"></div>
+    <div th:if="${message}" class="flash" th:text="${message}"></div>
+
+    <form th:action="@{/login}" method="post">
+        <div class="form-group">
+            <label for="email">Email Address</label>
+            <input id="email" type="email" name="email" placeholder="you@example.com" required />
+        </div>
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input id="password" type="password" name="password" placeholder="Enter your password" required />
+        </div>
+        <button type="submit" class="btn">Login</button>
+    </form>
+
+    <a th:href="@{/forgot-password}" class="link">Forgot Password?</a>
+    <a th:href="@{/register}" class="link">Create an Account</a>
+
+    <div class="footer">© SparkSupport</div>
+</div>
+</body>
+</html>

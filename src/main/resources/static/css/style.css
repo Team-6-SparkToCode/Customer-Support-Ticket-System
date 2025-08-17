@@ -1,0 +1,100 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+
+body {
+    font-family: 'Inter', sans-serif;
+    margin: 0;
+    padding: 0;
+    color: #fff;
+    background: linear-gradient(135deg, #0d6efd, #ff7a00 50%, #ff0000);
+    background-attachment: fixed;
+}
+
+.card {
+    background: rgba(255,155,255,0.1);
+    border-radius: 16px;
+    padding: 50px;
+    max-width: 500px;
+    margin: 60px auto;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 10px 30px rgba(0,5,5,0.2);
+}
+
+h2 {
+    text-align: center;
+    margin-bottom: 24px;
+    font-size: 45px;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+}
+
+.form-group {
+    width: 100%;
+    margin-bottom: 18px;
+    display: flex;
+    flex-direction: column;
+}
+
+label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: 600;
+    width: 100%;
+}
+
+input {
+    width: 95%;
+    padding: 18px;
+    border: none;
+    border-radius: 15px;
+    background: rgba(255,255,255,0.9);
+    color: #111;
+    font-size: 18px;
+    transition: box-shadow 0.3s ease;
+}
+
+input:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.5);
+}
+
+.btn {
+    width: 100%;
+    padding: 14px;
+    background: #ff7a00;
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.1s ease;
+    margin-top: 10px;
+}
+
+.btn:hover {
+    background: #ff0000;
+    transform: translateY(-2px);
+}
+
+.flash {
+    background: rgba(0,0,0,0.4);
+    padding: 14px;
+    border-radius: 10px;
+    margin-bottom: 18px;
+    text-align: center;
+    font-weight: 600;
+}
+
+.link {
+    color: #fff0d2;
+    text-decoration: underline;
+    text-align: center;
+    display: block;
+    margin-top: 12px;
+}
+
+.footer {
+    text-align: center;
+    margin-top: 24px;
+    font-size: 14px;
+    color: #fff8e1;
+}
