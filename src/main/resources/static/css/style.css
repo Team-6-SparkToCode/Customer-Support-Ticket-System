@@ -5,8 +5,30 @@ body {
     margin: 0;
     padding: 0;
     color: #fff;
-    background: linear-gradient(135deg, #0d6efd, #ff7a00 50%, #ff0000);
+
+    background: radial-gradient(
+        circle at top left,
+        #0d6efd 0%,
+        #ff7a00 30%,
+        #3B1E52 60%,
+        #ff0000 100%
+    );
     background-attachment: fixed;
+
+    /* Optional: soften the background via blur overlay */
+    position: relative;
+}
+
+body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: inherit;
+    filter: blur(60px);
+    z-index: -1;
 }
 
 .card {
