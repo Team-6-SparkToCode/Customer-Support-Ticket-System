@@ -1,0 +1,16 @@
+spring:
+  application:
+    name: ticket-system
+  datasource:
+    url: jdbc:mysql://localhost:3306/ticketSystem?createDatabaseIfNotExist=true
+    username: root
+    password: ${DB_PASS:}
+  jpa:
+    hibernate:
+      ddl-auto: update #please once you confirm everything and finish dev change this to none :)
+      #also to not forget to make migrations after db edits pls
+    show-sql: true
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+    baseline-on-migrate: true
