@@ -1,6 +1,8 @@
 package com.example.ticket.system.entities;
 
 import com.example.ticket.system.TicketStatus;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,6 +25,7 @@ public class Ticket {
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "customer_id", nullable = false)
+    @JsonIgnore
     private Customer customer;
 
     @ManyToOne

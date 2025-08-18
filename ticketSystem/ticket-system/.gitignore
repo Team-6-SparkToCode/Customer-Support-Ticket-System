@@ -31,3 +31,40 @@ build/
 
 ### VS Code ###
 .vscode/
+
+
+# IntelliJ IDEA
+.idea/
+*.iml
+out/
+*.iws
+*.ipr
+*.log
+
+# Maven
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Environment files
+.env
+*.env
+
+# Flyway migration files (optional if you want to version them)
+# src/main/resources/db/migration/*.sql
+
+# Logs
+logs/
+*.log
+
+# Temporary files
+*.tmp
+*.swp
+
