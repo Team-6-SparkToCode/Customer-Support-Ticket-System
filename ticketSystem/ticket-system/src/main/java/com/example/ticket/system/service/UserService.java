@@ -22,6 +22,9 @@ public class UserService {
     @PersistenceContext
     private EntityManager entityManager;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     public User createUser(User user) {
         // hash before saving
         user.setPassword(passwordEncoder.encode(user.getPassword()));
