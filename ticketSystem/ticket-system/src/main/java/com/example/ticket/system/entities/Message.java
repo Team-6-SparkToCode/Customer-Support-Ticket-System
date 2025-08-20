@@ -16,10 +16,8 @@ public class Message {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
     private Long id;
 
-    // Many-to-one relation to User (Staff or Customer)
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "sender_id", nullable = false)
     private User sender;
@@ -35,9 +33,9 @@ public class Message {
     private String attachmentUrl;
 
     @Column(name = "created_at", insertable = false, updatable = false)
-    private LocalDateTime timestamp; // DB default will populate
+    private LocalDateTime timestamp;
 
-    // Optional convenience method to set sender and ticket together
+    // Convenience initializer
     public void init(User sender, Ticket ticket, String content) {
         this.sender = sender;
         this.ticket = ticket;

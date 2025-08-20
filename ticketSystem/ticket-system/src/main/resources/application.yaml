@@ -11,11 +11,15 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: validate
-    database-platform: org.hibernate.dialect.MySQLDialect
+      ddl-auto: update
+    database-platform: org.hibernate.dialect.MySQL8Dialect
     show-sql: true
 
   flyway:
     enabled: true
     locations: classpath:db/migration
     baseline-on-migrate: true
+
+jwt:
+  secret: ${JWT_SECRET:secret_for_dev_use}
+  expiration-ms: 86400000

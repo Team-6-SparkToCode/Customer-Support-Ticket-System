@@ -3,13 +3,13 @@ package com.example.ticket.system.entities;
 import com.example.ticket.system.Role;
 import com.example.ticket.system.TicketStatus;
 import jakarta.persistence.*;
-
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @DiscriminatorValue("STAFF")
 public class Staff extends User {
+
     @OneToMany(mappedBy = "assignedStaff", fetch = FetchType.LAZY)
     private List<Ticket> assignedTickets = new ArrayList<>();
 
@@ -18,8 +18,8 @@ public class Staff extends User {
         return Role.STAFF;
     }
 
-    public void assignTicket(Ticket ticket, Staff staff) {
-        ticket.setAssignedStaff(staff);
+    public void assignTicket(Ticket ticket) {
+        ticket.setAssignedStaff(this);
     }
 
     public void updateTicketStatus(Ticket ticket, TicketStatus status) {
@@ -38,4 +38,3 @@ public class Staff extends User {
         ticket.addInternalNote(note);
     }
 }
-

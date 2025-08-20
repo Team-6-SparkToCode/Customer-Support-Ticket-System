@@ -2,7 +2,6 @@ package com.example.ticket.system.entities;
 
 import com.example.ticket.system.TicketStatus;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,9 +17,9 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 public class Ticket {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
     private Long id;
 
     @ManyToOne(optional = false)
@@ -63,15 +62,11 @@ public class Ticket {
     @Transient
     private List<String> internalNotes = new ArrayList<>();
 
-    // domain helpers
+    // Helper methods
     public void addMessage(Message message) {
         if (message == null) return;
         message.setTicket(this);
         this.messages.add(message);
-    }
-
-    public void setStatus(TicketStatus status) {
-        this.status = status;
     }
 
     public void assignStaff(Staff staff) {

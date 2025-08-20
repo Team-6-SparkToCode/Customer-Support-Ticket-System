@@ -65,4 +65,12 @@ public abstract class User {
     // Abstract method forcing subclasses to define their default role
     @Transient
     public abstract Role getRole();
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
 }
