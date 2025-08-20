@@ -36,13 +36,14 @@ public class UserService {
     }
 
     public User getUserById(Long id) {
-        return userRepository.findById(id).orElseThrow();
+        return userRepository.findById(id).orElseThrow("User not found with id: " + id);
     }
 
     public User getUserByEmail(String email) {
         return userRepository.findByEmail(email).orElseThrow(() -> new IllegalArgumentException("User not found with email: " + email));
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @Transactional
     public User promoteToStaff(Long userId) {
         // Update discriminator column directly to switch subtype reliably
@@ -55,9 +56,10 @@ public class UserService {
         entityManager.clear(); // ensure we reload fresh subtype
         User reloaded = userRepository.findById(userId).orElseThrow();
         // If JPA still returns base proxy, just return it; JSON in tests uses common fields
-        return reloaded instanceof Staff ? reloaded : reloaded;
+        return reloaded;
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @Transactional
     public User promoteToAdmin(Long userId) {
         int updated = entityManager.createNativeQuery("UPDATE users SET role = 'ADMIN' WHERE id = ?1")
@@ -68,6 +70,6 @@ public class UserService {
         }
         entityManager.clear();
         User reloaded = userRepository.findById(userId).orElseThrow();
-        return reloaded instanceof Admin ? reloaded : reloaded;
+        return reloaded;
     }
 }
