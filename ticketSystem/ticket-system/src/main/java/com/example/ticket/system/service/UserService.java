@@ -23,6 +23,8 @@ public class UserService {
     private EntityManager entityManager;
 
     public User createUser(User user) {
+        // hash before saving
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userRepository.save(user);
     }
 
@@ -32,6 +34,10 @@ public class UserService {
 
     public User getUserById(Long id) {
         return userRepository.findById(id).orElseThrow();
+    }
+
+    public User getUserByEmail(String email) {
+        return userRepository.findByEmail(email).orElseThrow(() -> new IllegalArgumentException("User not found with email: " + email));
     }
 
     @Transactional
