@@ -21,4 +21,8 @@ public class Priority {
 
     @Column(name = "level", columnDefinition = "TINYINT UNSIGNED", nullable = false)
     private int level; // 1..4 per migration
+
+    public Long getId() {
+        return this.id;
+    }
 }

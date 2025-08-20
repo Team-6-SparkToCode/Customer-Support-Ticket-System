@@ -1,17 +1,19 @@
 package com.example.ticket.system.entities;
 
-import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
 import java.time.LocalDateTime;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "ticket_messages")
-@Getter
-@Setter
-@NoArgsConstructor
 public class Message {
 
     @Id
@@ -42,5 +44,17 @@ public class Message {
         this.sender = sender;
         this.ticket = ticket;
         this.content = content;
+    }
+
+    public void setSender(User sender) {
+        this.sender = sender;
+    }
+
+    public void setContent(String messageContent) {
+        this.content = messageContent;
+    }
+
+    public void setTicket(Ticket ticket) {
+        this.ticket = ticket;
     }
 }
