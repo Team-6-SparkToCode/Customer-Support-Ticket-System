@@ -3,6 +3,8 @@ package com.example.ticket.system.entities;
 import com.example.ticket.system.Role;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -25,10 +27,13 @@ public class User {
     private String email;
     private String passwordHash;
     private String name;
-    private Role role;
     private String phone;
     private String department;
     private String createdAt;
+
+    @Enumerated(EnumType.STRING)
+    private Role role;
+
 
     // Automatically sets the createdAt field.
     @PrePersist

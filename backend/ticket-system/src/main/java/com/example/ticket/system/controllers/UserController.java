@@ -1,5 +1,4 @@
 package com.example.ticket.system.controllers;
-
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
@@ -12,8 +11,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.ticket.system.dto.LoginRequest;
+import com.example.ticket.system.dto.LoginResponse;
 import com.example.ticket.system.entities.User;
 import com.example.ticket.system.repositories.UserRepository;
+import com.example.ticket.system.security.JwtUtil;
 
 @RestController
 @RequestMapping("/users")
@@ -21,10 +22,12 @@ import com.example.ticket.system.repositories.UserRepository;
 public class UserController {
     private final UserRepository userRepo;
     private final PasswordEncoder passwordEncoder;
+    private final JwtUtil jwtUtil;
 
-    public UserController(UserRepository userRepo, PasswordEncoder passwordEncoder) {
+    public UserController(UserRepository userRepo, PasswordEncoder passwordEncoder, JwtUtil jwtUtil) {
         this.userRepo = userRepo;
         this.passwordEncoder = passwordEncoder;
+        this.jwtUtil = jwtUtil;
     }
 
     @PostMapping("/signup")
@@ -38,9 +41,12 @@ public class UserController {
         String email = loginRequest.getEmail();
         String password = loginRequest.getPassword();
         User user = userRepo.findByEmail(email).orElse(null);
+        
 
         if (user != null && passwordEncoder.matches(password, user.getPasswordHash())) {
-            return ResponseEntity.ok(user);
+            String token = jwtUtil.generateToken(user.getEmail(), user.getRole().name());
+
+            return ResponseEntity.ok(new LoginResponse(token, user.getName(), user.getRole(), user.getEmail()));
         }
         return ResponseEntity.status(401).body("Invalid email or password");
     }
