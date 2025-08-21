@@ -1,19 +1,27 @@
 package com.example.ticket.system.controllers;
 
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.example.ticket.system.TicketStatus;
 import com.example.ticket.system.entities.Category;
 import com.example.ticket.system.entities.Priority;
 import com.example.ticket.system.entities.Ticket;
 import com.example.ticket.system.entities.User;
-import com.example.ticket.system.service.TicketService;
-import com.example.ticket.system.service.UserService;
 import com.example.ticket.system.repositories.CategoryRepository;
 import com.example.ticket.system.repositories.PriorityRepository;
-import com.example.ticket.system.TicketStatus;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.Optional;
+import com.example.ticket.system.service.TicketService;
+import com.example.ticket.system.service.UserService;
 
 @RestController
 @RequestMapping("/api/admin")
