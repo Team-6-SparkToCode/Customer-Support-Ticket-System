@@ -17,3 +17,21 @@ jwt:
   secret: o9R8lP1jF7KzM3vQ2aW5eS6uT8xY0bC4dF1gH2jK7lP8qR9sT0vW3xY5zA6bN7cD
   expiration-ms: 86400000
 
+# Multipart limits (adjust as you wish)
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+
+# Where to write message attachments
+app:
+  upload-dir: uploads/messages
+
+# Serve files written under ./uploads/** directly (handy for dev)
+# If you're on Spring Boot 3, this works out of the box for 'file:' paths
+# You can access a saved file at http://localhost:8080/uploads/messages/<filename>
+# by adding this static location:
+spring:
+  web:
+    resources:
+      static-locations: classpath:/static/, file:uploads/
