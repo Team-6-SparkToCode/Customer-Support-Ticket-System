@@ -19,3 +19,21 @@ spring:
     enabled: true
     locations: classpath:db/migration
     baseline-on-migrate: true
+# Multipart limits (adjust as you wish)
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+
+# Where to write message attachments
+app:
+  upload-dir: uploads/messages
+
+# Serve files written under ./uploads/** directly (handy for dev)
+# If you're on Spring Boot 3, this works out of the box for 'file:' paths
+# You can access a saved file at http://localhost:8080/uploads/messages/<filename>
+# by adding this static location:
+spring:
+  web:
+    resources:
+      static-locations: classpath:/static/, file:uploads/
