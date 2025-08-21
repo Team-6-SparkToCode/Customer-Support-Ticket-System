@@ -1,22 +1,29 @@
 package com.example.ticket.system.entities;
 
-import com.example.ticket.system.TicketStatus;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.example.ticket.system.TicketStatus;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OrderBy;
+import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
+
 @Entity
 @Table(name = "tickets")
-@Getter
-@Setter
-@NoArgsConstructor
 public class Ticket {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -81,5 +88,61 @@ public class Ticket {
     public void addInternalNote(String note) {
         if (note == null) return;
         this.internalNotes.add(note);
+    }
+
+    public void setAssignedStaff(Staff staff) {
+        this.assignedStaff = staff;
+    }
+
+    public List<Message> getMessages() {
+        return messages;
+    }
+
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }
+
+    public void setPriority(Priority priority) {
+        this.priority = priority;
+    }
+
+    public void setSubject(String subject) {
+        this.subject = subject;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public Staff getAssignedStaff() {
+        return assignedStaff;
+    }
+
+    public Long getId() {
+        return this.id;
+    }
+
+    public TicketStatus getStatus() {
+        return status;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public Priority getPriority() {
+        return priority;
+    }
+
+    public Customer getCustomer() {
+        return this.customer;
+    }
+
+    public String getSubject() {
+        return this.subject;
     }
 }

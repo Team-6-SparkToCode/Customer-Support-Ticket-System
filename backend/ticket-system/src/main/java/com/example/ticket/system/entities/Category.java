@@ -6,19 +6,23 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "priorities")
+@Table(name = "categories")
 @Getter
 @Setter
 @NoArgsConstructor
-public class Priority {
+public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "name", nullable = false, unique = true, length = 50)
+    @Column(name = "name", nullable = false, unique = true, length = 100)
     private String name;
 
-    @Column(name = "level", columnDefinition = "TINYINT UNSIGNED", nullable = false)
-    private int level; // 1..4 per migration
+    @Column(name = "description")
+    private String description;
+
+    public Long getId() {
+        return this.id;
+    }
 }

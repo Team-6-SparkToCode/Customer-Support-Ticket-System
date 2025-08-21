@@ -1,10 +1,14 @@
 package com.example.ticket.system.entities;
 
-import com.example.ticket.system.Role;
-import jakarta.persistence.*;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import com.example.ticket.system.Role;
+
+import jakarta.persistence.DiscriminatorValue;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.OneToMany;
 
 @Entity
 @DiscriminatorValue("CUSTOMER")
@@ -12,9 +16,8 @@ public class Customer extends User {
     @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY)
     private List<Ticket> tickets = new ArrayList<>();
 
-    @Override
-    public Role getRole() {
-        return Role.CUSTOMER;
+    public Customer() {
+        super.setRole(Role.CUSTOMER);
     }
 
     public void createTicket(Ticket ticket) {
@@ -27,6 +30,10 @@ public class Customer extends User {
         msg.setContent(message);
         msg.setTicket(ticket);
         ticket.getMessages().add(msg);
+    }
+
+    public Long getId() {
+        return super.getId();
     }
 }
 

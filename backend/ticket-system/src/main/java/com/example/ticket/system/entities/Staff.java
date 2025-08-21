@@ -13,9 +13,8 @@ public class Staff extends User {
     @OneToMany(mappedBy = "assignedStaff", fetch = FetchType.LAZY)
     private List<Ticket> assignedTickets = new ArrayList<>();
 
-    @Override
-    public Role getRole() {
-        return Role.STAFF;
+    public Staff() {
+        super.setRole(Role.STAFF);
     }
 
     public void assignTicket(Ticket ticket, Staff staff) {
