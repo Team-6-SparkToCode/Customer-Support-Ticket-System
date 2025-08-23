@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin FAQ Management</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        h1 { margin-bottom: 10px; }
+        .stats, .faq-list, .faq-form, .search-bar { margin-bottom: 20px; padding: 10px; border: 1px solid #ccc; border-radius: 6px; }
+        .faq-item { border-bottom: 1px solid #ddd; padding: 8px 0; }
+        .faq-item:last-child { border-bottom: none; }
+        .faq-actions button { margin-right: 5px; }
+        label { display: block; margin: 5px 0 2px; }
+        input, textarea { width: 100%; padding: 6px; margin-bottom: 10px; }
+        button { padding: 6px 12px; cursor: pointer; }
+        .inactive { color: gray; }
+    </style>
+</head>
+<body>
+
+<h1>Admin FAQ Management</h1>
+
+<div class="stats">
+    <h2>Statistics</h2>
+    <div id="stats"></div>
+</div>
+
+<div class="search-bar">
+    <h2>Search FAQs</h2>
+    <input type="text" id="searchInput" placeholder="Search by question, answer, category, tags...">
+    <button onclick="searchFAQs()">Search</button>
+</div>
+
+<div class="faq-form">
+    <h2>Add / Edit FAQ</h2>
+    <form id="faqForm">
+        <input type="hidden" id="faqId">
+        <label>Question</label>
+        <input type="text" id="question" required>
+        <label>Answer</label>
+        <textarea id="answer" required></textarea>
+        <label>Category</label>
+        <input type="text" id="category">
+        <label>Tags (comma separated)</label>
+        <input type="text" id="tags">
+        <button type="submit">Save FAQ</button>
+    </form>
+</div>
+
+<div class="faq-list">
+    <h2>All FAQs</h2>
+    <div id="faqContainer"></div>
+</div>
+
+<script>
+    const API_BASE = "http://localhost:8080/api/admin/faqs";
+
+    async function loadFAQs() {
+        const res = await fetch(API_BASE);
+        const faqs = await res.json();
+        renderFAQs(faqs);
+    }
+
+    async function loadStats() {
+        const res = await fetch(API_BASE + "/stats");
+        const stats = await res.json();
+        document.getElementById("stats").innerHTML = `
+    Total FAQs: ${stats.totalFAQs}<br>
+    Active: ${stats.activeFAQs}, Inactive: ${stats.inactiveFAQs}<br>
+    Categories: ${stats.totalCategories} (${Object.entries(stats.categoryDistribution).map(([k,v]) => k+":"+v).join(", ")})<br>
+    Total Views: ${stats.totalViews}
+  `;
+    }
+
+    function renderFAQs(faqs) {
+        const container = document.getElementById("faqContainer");
+        container.innerHTML = "";
+        faqs.forEach(faq => {
+            const div = document.createElement("div");
+            div.className = "faq-item " + (faq.active ? "" : "inactive");
+            div.innerHTML = `
+      <strong>${faq.question}</strong> [${faq.category || "Uncategorized"}]<br>
+      ${faq.answer}<br>
+      Tags: ${faq.tags || "-"}<br>
+      Status: ${faq.active ? "Active" : "Inactive"}<br>
+      <div class="faq-actions">
+        <button onclick="editFAQ(${faq.id})">Edit</button>
+        <button onclick="deleteFAQ(${faq.id})">Delete</button>
+        <button onclick="toggleFAQ(${faq.id})">Toggle Status</button>
+      </div>
+    `;
+            container.appendChild(div);
+        });
+    }
+
+    document.getElementById("faqForm").addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const id = document.getElementById("faqId").value;
+        const faq = {
+            question: document.getElementById("question").value,
+            answer: document.getElementById("answer").value,
+            category: document.getElementById("category").value,
+            tags: document.getElementById("tags").value,
+        };
+        if (id) {
+            await fetch(API_BASE + "/" + id, { method: "PUT", headers: {"Content-Type": "application/json"}, body: JSON.stringify(faq)});
+        } else {
+            await fetch(API_BASE, { method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify(faq)});
+        }
+        e.target.reset();
+        document.getElementById("faqId").value = "";
+        await loadFAQs();
+        await loadStats();
+    });
+
+    async function editFAQ(id) {
+        const res = await fetch(API_BASE + "/" + id);
+        const faq = await res.json();
+        document.getElementById("faqId").value = faq.id;
+        document.getElementById("question").value = faq.question;
+        document.getElementById("answer").value = faq.answer;
+        document.getElementById("category").value = faq.category || "";
+        document.getElementById("tags").value = faq.tags || "";
+    }
+
+    async function deleteFAQ(id) {
+        if (confirm("Delete this FAQ?")) {
+            await fetch(API_BASE + "/" + id, { method: "DELETE" });
+            await loadFAQs();
+            await loadStats();
+        }
+    }
+
+    async function toggleFAQ(id) {
+        await fetch(API_BASE + "/" + id + "/toggle", { method: "PUT" });
+        await loadFAQs();
+        await loadStats();
+    }
+
+    async function searchFAQs() {
+        const query = document.getElementById("searchInput").value;
+        const res = await fetch(API_BASE + "/search?query=" + encodeURIComponent(query));
+        const faqs = await res.json();
+        renderFAQs(faqs);
+    }
+
+    loadFAQs();
+    loadStats();
+</script>
+
+</body>
+</html>

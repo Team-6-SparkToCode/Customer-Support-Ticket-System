@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FAQ - Frequently Asked Questions</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            color: white;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .search-section {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+
+        .search-container {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 15px 20px;
+            border: 2px solid #e1e5e9;
+            border-radius: 50px;
+            font-size: 16px;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .search-input:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .search-btn {
+            padding: 15px 25px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .search-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .category-filters {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .category-btn {
+            padding: 8px 16px;
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .category-btn:hover, .category-btn.active {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .stat-label {
+            color: #666;
+            margin-top: 5px;
+        }
+
+        .faq-container {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+
+        .faq-item {
+            border: 1px solid #e1e5e9;
+            border-radius: 15px;
+            margin-bottom: 15px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .faq-item:hover {
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .faq-question {
+            padding: 20px;
+            background: #f8f9fa;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+            color: #333;
+            transition: all 0.3s ease;
+        }
+
+        .faq-question:hover {
+            background: #e9ecef;
+        }
+
+        .faq-question.active {
+            background: #667eea;
+            color: white;
+        }
+
+        .faq-arrow {
+            font-size: 18px;
+            transition: transform 0.3s ease;
+        }
+
+        .faq-question.active .faq-arrow {
+            transform: rotate(180deg);
+        }
+
+        .faq-answer {
+            padding: 0 20px;
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .faq-answer.active {
+            padding: 20px;
+            max-height: 500px;
+        }
+
+        .faq-meta {
+            display: flex;
+            gap: 15px;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #e1e5e9;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .faq-category {
+            background: #e3f2fd;
+            color: #1976d2;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+        }
+
+        .faq-views {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+        }
+
+        .error {
+            background: #ffebee;
+            color: #c62828;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border-left: 4px solid #c62828;
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+        }
+
+        .highlight {
+            background: yellow;
+            padding: 2px 4px;
+            border-radius: 3px;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .search-container {
+                flex-direction: column;
+            }
+
+            .category-filters {
+                justify-content: flex-start;
+            }
+
+            .stats {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>FAQ</h1>
+        <p>Find answers to frequently asked questions about Codeline and Rihal</p>
+    </div>
+
+    <div class="search-section">
+        <div class="search-container">
+            <input
+                    type="text"
+                    id="searchInput"
+                    class="search-input"
+                    placeholder="Search for answers..."
+                    onkeypress="handleSearchKeyPress(event)"
+            >
+            <button class="search-btn" onclick="searchFAQs()">
+                🔍 Search
+            </button>
+        </div>
+
+        <div class="category-filters" id="categoryFilters">
+            <button class="category-btn active" onclick="filterByCategory('')">All</button>
+            <!-- Categories will be loaded dynamically -->
+        </div>
+    </div>
+
+    <div class="stats">
+        <div class="stat-card">
+            <div class="stat-number" id="totalFAQs">-</div>
+            <div class="stat-label">Total FAQs</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number" id="totalCategories">-</div>
+            <div class="stat-label">Categories</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number" id="totalViews">-</div>
+            <div class="stat-label">Total Views</div>
+        </div>
+    </div>
+
+    <div class="faq-container">
+        <div id="loadingMessage" class="loading">
+            Loading FAQs...
+        </div>
+
+        <div id="errorMessage" class="error" style="display: none;">
+            Error loading FAQs. Please try again later.
+        </div>
+
+        <div id="noResults" class="no-results" style="display: none;">
+            No FAQs found matching your search.
+        </div>
+
+        <div id="faqList">
+            <!-- FAQs will be loaded here -->
+        </div>
+    </div>
+</div>
+
+<script>
+    let allFAQs = [];
+    let categories = [];
+    let currentCategory = '';
+    let currentSearch = '';
+
+    // Load FAQs on page load
+    document.addEventListener('DOMContentLoaded', function() {
+        loadFAQs();
+        loadCategories();
+    });
+
+    async function loadFAQs() {
+        try {
+            showLoading();
+            const response = await fetch('/api/public/faqs');
+
+            if (!response.ok) {
+                throw new Error('Failed to load FAQs');
+            }
+
+            allFAQs = await response.json();
+            displayFAQs(allFAQs);
+            updateStats();
+            hideLoading();
+
+        } catch (error) {
+            console.error('Error loading FAQs:', error);
+            showError();
+        }
+    }
+
+    async function loadCategories() {
+        try {
+            const response = await fetch('/api/public/faqs/categories');
+            if (response.ok) {
+                categories = await response.json();
+                displayCategories();
+            }
+        } catch (error) {
+            console.error('Error loading categories:', error);
+        }
+    }
+
+    function displayCategories() {
+        const filtersContainer = document.getElementById('categoryFilters');
+        const allButton = filtersContainer.querySelector('.category-btn');
+
+        // Clear existing category buttons (except "All")
+        const existingCategories = filtersContainer.querySelectorAll('.category-btn:not(:first-child)');
+        existingCategories.forEach(btn => btn.remove());
+
+        // Add category buttons
+        categories.forEach(category => {
+            const button = document.createElement('button');
+            button.className = 'category-btn';
+            button.textContent = category;
+            button.onclick = () => filterByCategory(category);
+            filtersContainer.appendChild(button);
+        });
+    }
+
+    function displayFAQs(faqs) {
+        const faqList = document.getElementById('faqList');
+
+        if (faqs.length === 0) {
+            showNoResults();
+            return;
+        }
+
+        hideNoResults();
+
+        faqList.innerHTML = faqs.map(faq => `
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFAQ(${faq.id})" id="question-${faq.id}">
+                        <span>${highlightText(faq.question, currentSearch)}</span>
+                        <span class="faq-arrow">▼</span>
+                    </div>
+                    <div class="faq-answer" id="answer-${faq.id}">
+                        <div>${highlightText(faq.answer, currentSearch)}</div>
+                        <div class="faq-meta">
+                            ${faq.category ? `<span class="faq-category">${faq.category}</span>` : ''}
+                            <span class="faq-views">👁 ${faq.viewCount || 0} views</span>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+    }
+
+    function toggleFAQ(id) {
+        const question = document.getElementById(`question-${id}`);
+        const answer = document.getElementById(`answer-${id}`);
+
+        question.classList.toggle('active');
+        answer.classList.toggle('active');
+
+        // Increment view count
+        if (answer.classList.contains('active')) {
+            incrementViewCount(id);
+        }
+    }
+
+    async function incrementViewCount(id) {
+        try {
+            await fetch(`/api/public/faqs/${id}/view`, { method: 'POST' });
+        } catch (error) {
+            console.error('Error incrementing view count:', error);
+        }
+    }
+
+    async function searchFAQs() {
+        const searchTerm = document.getElementById('searchInput').value.trim();
+        currentSearch = searchTerm;
+
+        if (searchTerm === '') {
+            displayFAQs(filterFAQsByCategory(allFAQs));
+            return;
+        }
+
+        try {
+            showLoading();
+            const response = await fetch(`/api/public/faqs/search?q=${encodeURIComponent(searchTerm)}`);
+
+            if (response.ok) {
+                const searchResults = await response.json();
+                displayFAQs(filterFAQsByCategory(searchResults));
+            } else {
+                throw new Error('Search failed');
+            }
+
+            hideLoading();
+
+        } catch (error) {
+            console.error('Error searching FAQs:', error);
+            // Fallback to client-side search
+            const results = allFAQs.filter(faq =>
+                faq.question.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                faq.answer.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                (faq.tags && faq.tags.toLowerCase().includes(searchTerm.toLowerCase()))
+            );
+            displayFAQs(filterFAQsByCategory(results));
+            hideLoading();
+        }
+    }
+
+    function filterByCategory(category) {
+        currentCategory = category;
+
+        // Update active category button
+        document.querySelectorAll('.category-btn').forEach(btn => {
+            btn.classList.remove('active');
+            if ((category === '' && btn.textContent === 'All') ||
+                btn.textContent === category) {
+                btn.classList.add('active');
+            }
+        });
+
+        // Filter and display FAQs
+        const filteredFAQs = filterFAQsByCategory(allFAQs);
+        displayFAQs(filteredFAQs);
+    }
+
+    function filterFAQsByCategory(faqs) {
+        if (currentCategory === '') {
+            return faqs;
+        }
+        return faqs.filter(faq => faq.category === currentCategory);
+    }
+
+    function handleSearchKeyPress(event) {
+        if (event.key === 'Enter') {
+            searchFAQs();
+        }
+    }
+
+    function highlightText(text, searchTerm) {
+        if (!searchTerm || searchTerm.trim() === '') {
+            return text;
+        }
+
+        const regex = new RegExp(`(${escapeRegExp(searchTerm)})`, 'gi');
+        return text.replace(regex, '<span class="highlight">$1</span>');
+    }
+
+    function escapeRegExp(string) {
+        return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    }
+
+    function updateStats() {
+        const totalViews = allFAQs.reduce((sum, faq) => sum + (faq.viewCount || 0), 0);
+
+        document.getElementById('totalFAQs').textContent = allFAQs.length;
+        document.getElementById('totalCategories').textContent = categories.length;
+        document.getElementById('totalViews').textContent = totalViews.toLocaleString();
+    }
+
+    function showLoading() {
+        document.getElementById('loadingMessage').style.display = 'block';
+        document.getElementById('faqList').style.display = 'none';
+        hideError();
+        hideNoResults();
+    }
+
+    function hideLoading() {
+        document.getElementById('loadingMessage').style.display = 'none';
+        document.getElementById('faqList').style.display = 'block';
+    }
+
+    function showError() {
+        document.getElementById('errorMessage').style.display = 'block';
+        hideLoading();
+        hideNoResults();
+    }
+
+    function hideError() {
+        document.getElementById('errorMessage').style.display = 'none';
+    }
+
+    function showNoResults() {
+        document.getElementById('noResults').style.display = 'block';
+        document.getElementById('faqList').style.display = 'none';
+    }
+
+    function hideNoResults() {
+        document.getElementById('noResults').style.display = 'none';
+        document.getElementById('faqList').style.display = 'block';
+    }
+</script>
+</body>
+</html>
