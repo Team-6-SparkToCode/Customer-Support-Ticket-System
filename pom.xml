@@ -28,8 +28,7 @@
 	</scm>
 	<properties>
 			<java.version>24</java.version>
-            <!-- Placeholder; will be overridden by .env via properties-maven-plugin at build time -->
-            <DB_PASS></DB_PASS>
+            <DB_PASSWORD>passHere</DB_PASSWORD>
 		</properties>
 	<dependencies>
 		<dependency>
@@ -61,10 +60,16 @@
             <scope>runtime</scope>
         </dependency>
         <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
             <groupId>me.paulschwarz</groupId>
             <artifactId>spring-dotenv</artifactId>
             <version>3.0.0</version>
         </dependency>
+
         <dependency>
             <groupId>org.flywaydb</groupId>
             <artifactId>flyway-core</artifactId>
@@ -72,11 +77,6 @@
         <dependency>
             <groupId>org.flywaydb</groupId>
             <artifactId>flyway-mysql</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <scope>compileOnly</scope>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -95,15 +95,37 @@
             
 
             <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>properties-maven-plugin</artifactId>
+                <version>1.1.0</version>
+                <executions>
+                    <execution>
+                        <phase>initialize</phase>
+                        <goals>
+                            <goal>read-project-properties</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
                 <groupId>org.flywaydb</groupId>
                 <artifactId>flyway-maven-plugin</artifactId>
                 <configuration>
                     <url>jdbc:mysql://localhost:3306/ticketSystem?createDatabaseIfNotExist=true</url>
                     <user>root</user>
-                    <password>${DB_PASS}</password>
+                    <password>passHere</password>
                 </configuration>
             </plugin>
-
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>24</source>
+                    <target>24</target>
+                    <compilerArgs>--enable-preview</compilerArgs>
+                </configuration>
+            </plugin>
 
         </plugins>
 	</build>

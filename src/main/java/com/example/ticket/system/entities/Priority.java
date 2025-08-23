@@ -19,6 +19,6 @@ public class Priority {
     @Column(name = "name", nullable = false, unique = true, length = 50)
     private String name;
 
-    @Column(name = "level", nullable = false)
+    @Column(name = "level", columnDefinition = "TINYINT UNSIGNED", nullable = false)
     private int level; // 1..4 per migration
 }

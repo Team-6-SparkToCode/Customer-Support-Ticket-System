@@ -1,6 +1,8 @@
 package com.example.ticket.system.entities;
 
 import com.example.ticket.system.TicketStatus;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,6 +25,7 @@ public class Ticket {
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "customer_id", nullable = false)
+    @JsonIgnore
     private Customer customer;
 
     @ManyToOne
@@ -57,6 +60,23 @@ public class Ticket {
     @OrderBy("timestamp ASC")
     private List<Message> messages = new ArrayList<>();
 
+    // --- Customer Satisfaction (CSAT) ---
+    @Column(name = "csat_speed_score")   // 1..5
+    private Integer csatSpeedScore;
+
+    @Column(name = "csat_quality_score") // 1..5
+    private Integer csatQualityScore;
+
+    @Column(name = "csat_overall_score") // 1..5
+    private Integer csatOverallScore;
+
+    @Column(name = "csat_comment", length = 1000)
+    private String csatComment;
+
+    @Column(name = "csat_submitted_at")
+    private LocalDateTime csatSubmittedAt;
+
+
     @Transient
     private List<String> internalNotes = new ArrayList<>();
 
@@ -79,4 +99,5 @@ public class Ticket {
         if (note == null) return;
         this.internalNotes.add(note);
     }
+
 }

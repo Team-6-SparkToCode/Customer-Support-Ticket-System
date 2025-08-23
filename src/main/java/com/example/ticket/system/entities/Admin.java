@@ -13,8 +13,12 @@ public class Admin extends Staff {
     }
 
     // Admin capabilities - stubs for now
-    public void createStaff(User userData) {}
-    public void updateStaff(User staff) {}
+    public void createStaff(User userData) {
+
+    }
+    public void updateStaff(User staff) {
+
+    }
     public void deleteStaff(Long staffId) {}
     public void manageCategory(Category category) {}
     public void managePriority(Priority priority) {}

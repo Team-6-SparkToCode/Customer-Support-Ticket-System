@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>CSAT Feedback</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f7fa;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .csat-container {
+            background: #fff;
+            padding: 20px 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            width: 400px;
+        }
+
+        h2, h3 {
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .faces {
+            display: flex;
+            justify-content: space-between;
+            margin: 10px 0 20px 0;
+        }
+
+        .faces label {
+            cursor: pointer;
+            text-align: center;
+        }
+
+        .circle {
+            display: inline-block;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            border: 3px solid white;
+            box-shadow: 0 0 0 2px gray;
+            transition: all 0.2s ease;
+        }
+
+        .circle.bad    { box-shadow: 0 0 0 2px red; }
+        .circle.ok     { box-shadow: 0 0 0 2px orange; }
+        .circle.neutral{ box-shadow: 0 0 0 2px gray; }
+        .circle.good   { box-shadow: 0 0 0 2px lightgreen; }
+        .circle.verygood { box-shadow: 0 0 0 2px green; }
+
+        input[type="radio"] {
+            display: none;
+        }
+
+        input[type="radio"]:checked + .circle {
+            background-color: currentColor;
+        }
+
+        input[value="1"] + .bad     { color: red; }
+        input[value="2"] + .ok      { color: orange; }
+        input[value="3"] + .neutral { color: gray; }
+        input[value="4"] + .good    { color: lightgreen; }
+        input[value="5"] + .verygood { color: green; }
+
+        .circle-text {
+            display: block;
+            margin-top: 4px;
+            font-size: 0.75em;
+            color: #333;
+        }
+
+        textarea {
+            width: 100%;
+            margin-top: 10px;
+            padding: 8px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            resize: vertical;
+        }
+
+        button {
+            margin-top: 12px;
+            padding: 10px;
+            width: 100%;
+            background: #0077cc;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #005fa3;
+        }
+
+        #result {
+            margin-top: 10px;
+            font-weight: bold;
+        }
+
+        .debug-info {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            padding: 10px;
+            margin-top: 10px;
+            font-size: 0.8em;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+<div class="csat-container">
+    <h2>Please rate our support</h2>
+
+    <div class="rating-row">
+        <h3>Speed of response</h3>
+        <div class="faces">
+            <label><input type="radio" name="speed" value="1"><span class="circle bad"></span><span class="circle-text">Really Bad</span></label>
+            <label><input type="radio" name="speed" value="2"><span class="circle ok"></span><span class="circle-text">Bad</span></label>
+            <label><input type="radio" name="speed" value="3"><span class="circle neutral"></span><span class="circle-text">Neutral</span></label>
+            <label><input type="radio" name="speed" value="4"><span class="circle good"></span><span class="circle-text">Good</span></label>
+            <label><input type="radio" name="speed" value="5"><span class="circle verygood"></span><span class="circle-text">Very Good</span></label>
+        </div>
+    </div>
+
+    <div class="rating-row">
+        <h3>Quality of support</h3>
+        <div class="faces">
+            <label><input type="radio" name="quality" value="1"><span class="circle bad"></span><span class="circle-text">Really Bad</span></label>
+            <label><input type="radio" name="quality" value="2"><span class="circle ok"></span><span class="circle-text">Bad</span></label>
+            <label><input type="radio" name="quality" value="3"><span class="circle neutral"></span><span class="circle-text">Neutral</span></label>
+            <label><input type="radio" name="quality" value="4"><span class="circle good"></span><span class="circle-text">Good</span></label>
+            <label><input type="radio" name="quality" value="5"><span class="circle verygood"></span><span class="circle-text">Very Good</span></label>
+        </div>
+    </div>
+
+    <div class="rating-row">
+        <h3>Overall satisfaction</h3>
+        <div class="faces">
+            <label><input type="radio" name="overall" value="1"><span class="circle bad"></span><span class="circle-text">Really Bad</span></label>
+            <label><input type="radio" name="overall" value="2"><span class="circle ok"></span><span class="circle-text">Bad</span></label>
+            <label><input type="radio" name="overall" value="3"><span class="circle neutral"></span><span class="circle-text">Neutral</span></label>
+            <label><input type="radio" name="overall" value="4"><span class="circle good"></span><span class="circle-text">Good</span></label>
+            <label><input type="radio" name="overall" value="5"><span class="circle verygood"></span><span class="circle-text">Very Good</span></label>
+        </div>
+    </div>
+
+    <textarea id="comment" placeholder="Leave additional comments (optional)"></textarea>
+
+    <button onclick="submitCsat()">Submit</button>
+    <p id="result"></p>
+
+    <!-- Debug info -->
+    <div id="debug-info" class="debug-info" style="display: none;"></div>
+</div>
+
+<script>
+    async function submitCsat() {
+        console.log("=== FRONTEND DEBUG ===");
+
+        // Get selected values
+        const speedElement = document.querySelector('input[name="speed"]:checked');
+        const qualityElement = document.querySelector('input[name="quality"]:checked');
+        const overallElement = document.querySelector('input[name="overall"]:checked');
+
+        console.log("Speed element:", speedElement);
+        console.log("Quality element:", qualityElement);
+        console.log("Overall element:", overallElement);
+
+        if (!speedElement || !qualityElement || !overallElement) {
+            alert("Please rate all categories!");
+            return;
+        }
+
+        const speedValue = parseInt(speedElement.value);
+        const qualityValue = parseInt(qualityElement.value);
+        const overallValue = parseInt(overallElement.value);
+        const commentValue = document.getElementById("comment").value.trim();
+
+        console.log("Extracted values:");
+        console.log("Speed:", speedValue, "Type:", typeof speedValue);
+        console.log("Quality:", qualityValue, "Type:", typeof qualityValue);
+        console.log("Overall:", overallValue, "Type:", typeof overallValue);
+        console.log("Comment:", commentValue, "Type:", typeof commentValue);
+
+        const payload = {
+            customerId: 1,
+            speed: speedValue,
+            quality: qualityValue,
+            overall: overallValue,
+            comment: commentValue || null
+        };
+
+        console.log("Final payload:", JSON.stringify(payload, null, 2));
+
+        // Show debug info
+        document.getElementById("debug-info").style.display = "block";
+        document.getElementById("debug-info").innerHTML =
+            "<strong>Debug Info:</strong><br>" +
+            "Speed: " + speedValue + "<br>" +
+            "Quality: " + qualityValue + "<br>" +
+            "Overall: " + overallValue + "<br>" +
+            "Comment: '" + commentValue + "'<br>" +
+            "Payload: " + JSON.stringify(payload);
+
+        try {
+            const ticketId = 1;
+            console.log("Sending request to:", `/api/customers/tickets/${ticketId}/csat`);
+
+            const resp = await fetch(`/api/customers/tickets/${ticketId}/csat`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Accept": "application/json"
+                },
+                body: JSON.stringify(payload)
+            });
+
+            console.log("Response status:", resp.status);
+            console.log("Response headers:", resp.headers);
+
+            if (resp.ok) {
+                const responseText = await resp.text();
+                console.log("Success response:", responseText);
+                document.getElementById("result").innerText = "✅ Thank you for your feedback!";
+                document.getElementById("result").style.color = "green";
+            } else {
+                const errorText = await resp.text();
+                console.error("Error response:", errorText);
+                document.getElementById("result").innerText = "❌ Error: " + errorText;
+                document.getElementById("result").style.color = "red";
+            }
+        } catch (error) {
+            console.error("Fetch error:", error);
+            document.getElementById("result").innerText = "❌ Network error: " + error.message;
+            document.getElementById("result").style.color = "red";
+        }
+    }
+
+    // Add event listeners for debugging
+    document.addEventListener('DOMContentLoaded', function() {
+        const radioButtons = document.querySelectorAll('input[type="radio"]');
+        radioButtons.forEach(radio => {
+            radio.addEventListener('change', function() {
+                console.log('Radio changed:', this.name, '=', this.value);
+            });
+        });
+    });
+</script>
+</body>
+</html>

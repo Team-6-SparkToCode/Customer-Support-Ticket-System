@@ -1,16 +1,21 @@
 spring:
   application:
     name: ticket-system
+  config:
+    import: optional:file:.env[.properties]
   datasource:
-    url: jdbc:mysql://localhost:3306/ticketSystem?createDatabaseIfNotExist=true
+    url: ${DB_URL:jdbc:mysql://localhost:3306/ticketSystem?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC}
     username: root
-    password: ${DB_PASS:}
+    password: passHere
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
   jpa:
     hibernate:
-      ddl-auto: update #please once you confirm everything and finish dev change this to none :)
-      #also to not forget to make migrations after db edits pls
+      ddl-auto: validate
+    database-platform: org.hibernate.dialect.MySQLDialect
     show-sql: true
+
   flyway:
-    enabled: true
+    enabled: false
     locations: classpath:db/migration
     baseline-on-migrate: true

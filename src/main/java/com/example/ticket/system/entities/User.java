@@ -11,11 +11,12 @@ import java.util.List;
 @Entity
 @Table(name = "users")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name = "role")
+@DiscriminatorColumn(name = "role", discriminatorType = DiscriminatorType.STRING)
 @Getter
 @Setter
 @NoArgsConstructor
 public abstract class User {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -30,9 +31,7 @@ public abstract class User {
     @Column(name = "name", nullable = false)
     protected String name;
 
-    // mapped to discriminator column; keep read-only for JPA, expose via custom methods
-    @Getter(AccessLevel.NONE)
-    @Setter(AccessLevel.NONE)
+    // Discriminator column for JPA; store as VARCHAR in DB
     @Column(name = "role", insertable = false, updatable = false)
     protected String role;
 
@@ -53,12 +52,17 @@ public abstract class User {
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private List<Notification> notifications = new ArrayList<>();
 
-    // Expose role as enum as per spec
-    public abstract Role getRole();
+    // Expose role as enum
+    @Transient
+    public Role getRoleEnum() {
+        return role != null ? Role.valueOf(role) : null;
+    }
 
-    public void setRole(Role role) {
-        // Note: this writes the field, but JPA will not persist due to insertable/updatable=false.
-        // The effective type is controlled by the discriminator via subclass type.
+    public void setRoleEnum(Role role) {
         this.role = role != null ? role.name() : null;
     }
+
+    // Abstract method forcing subclasses to define their default role
+    @Transient
+    public abstract Role getRole();
 }
